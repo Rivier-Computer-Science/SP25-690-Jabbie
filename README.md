@@ -1,15 +1,15 @@
 # Skin Lesion Classification: Measuring the Impact of Regularization on CNN Generalization
 
-**Course:** COMP-690-AH2 — Topics in Deep Learning (SP26)  
-**Chapters covered:** 4 (Deep Neural Networks), 5 (Loss Functions), 6 (Fitting Models), 7 (Gradients & Initialization), 8 (Measuring Performance), 9 (Regularization)
+Course: COMP-690-AH2 — Topics in Deep Learning (SP26)  
+Chapters covered: 4 (Deep Neural Networks), 5 (Loss Functions), 6 (Fitting Models), 7 (Gradients & Initialization), 8 (Measuring Performance), 9 (Regularization)
 
 ---
 
 ## Project Overview
 
-This project investigates how regularization strategies affect the generalization of a convolutional neural network trained on imbalanced medical image data (dermoscopy skin lesion images). Using the publicly available **ISIC 2019** dataset, we compare multiple models and ablations to isolate the effect of dropout, weight decay, data augmentation, and loss function choice on balanced accuracy and AUC-ROC across 8 lesion classes.
+This project investigates how regularization strategies affect the generalization of a convolutional neural network trained on imbalanced medical image data (dermoscopy skin lesion images). Using the publicly available ISIC 2019 dataset, we compare multiple models and ablations to isolate the effect of dropout, weight decay, data augmentation, and loss function choice on balanced accuracy and AUC-ROC across 8 lesion classes.
 
-**Research question:** *Which combination of regularization strategies most improves CNN generalization on an imbalanced, multi-class medical image classification task?*
+Research question: Which combination of regularization strategies most improves CNN generalization on an imbalanced, multi-class medical image classification task?
 
 ---
 
@@ -46,9 +46,9 @@ skin-lesion-project/
 
 ## Dataset
 
-**Source:** [ISIC 2019 Challenge](https://challenge.isic-archive.com/data/)  
-**Size:** ~25,331 dermoscopy images across 8 skin lesion classes  
-**Format:** JPEG images + CSV metadata with ground truth labels
+Source: [ISIC 2019 Challenge](https://challenge.isic-archive.com/data/)  
+Size: ~25,331 dermoscopy images across 8 skin lesion classes  
+Format: JPEG images + CSV metadata with ground truth labels
 
 ### Classes
 | Label | Disease |
@@ -62,23 +62,10 @@ skin-lesion-project/
 | VASC | Vascular lesion |
 | SCC | Squamous cell carcinoma |
 
-### Download Instructions
-
-```bash
-# Option 1: Direct download via ISIC Archive API
-bash scripts/download_data.sh
-
-# Option 2: Manual download
-# 1. Go to: https://challenge.isic-archive.com/data/#2019
-# 2. Download "ISIC_2019_Training_Input.zip" (~9.1 GB)
-# 3. Download "ISIC_2019_Training_GroundTruth.csv"
-# 4. Extract to: data/ISIC_2019/
-```
-
 ### Data Split (Stratified)
-- **Train:** 70% (17,732 images)
-- **Validation:** 15% (3,800 images)
-- **Test:** 15% (3,799 images)
+- Train: 70% (17,732 images)
+- Validation: 15% (3,800 images)
+- Test: 15% (3,799 images)
 
 Splits are stratified by class to preserve class distribution. Split indices are saved to `results/splits.json` for exact reproducibility.
 
@@ -192,8 +179,8 @@ All hyperparameters are documented in `configs/config.yaml`. Key values:
 
 ## Evaluation Metrics
 
-- **Primary:** Balanced accuracy (macro-averaged recall) — justified by class imbalance
-- **Secondary:** Macro AUC-ROC, per-class F1, confusion matrix
+- Primary: Balanced accuracy (macro-averaged recall) — justified by class imbalance
+- Secondary: Macro AUC-ROC, per-class F1, confusion matrix
 - All metrics computed on the held-out test set only after all hyperparameter decisions are finalized
 
 ---
