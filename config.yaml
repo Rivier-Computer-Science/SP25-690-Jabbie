@@ -1,0 +1,90 @@
+# configs/config.yaml
+# Master configuration for all experiments
+# All hyperparameters are documented here for reproducibility
+
+# ─── Reproducibility ───────────────────────────────────────────────────────────
+seed: 42
+
+# ─── Data ──────────────────────────────────────────────────────────────────────
+data:
+  root: "data/ISIC_2019"
+  image_size: 224
+  batch_size: 32
+  num_workers: 4
+  splits:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+  splits_file: "results/splits.json"
+  classes:
+    - MEL    # Melanoma
+    - NV     # Melanocytic nevus
+    - BCC    # Basal cell carcinoma
+    - AK     # Actinic keratosis
+    - BKL    # Benign keratosis
+    - DF     # Dermatofibroma
+    - VASC   # Vascular lesion
+    - SCC    # Squamous cell carcinoma
+  num_classes: 8
+
+# ─── Augmentation (applied to training set only) ───────────────────────────────
+augmentation:
+  enabled: true
+  random_horizontal_flip: 0.5
+  random_vertical_flip: 0.5
+  random_rotation: 20
+  color_jitter:
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.1
+    hue: 0.05
+  random_resized_crop:
+    scale: [0.8, 1.0]
+  normalize:
+    mean: [0.485, 0.456, 0.406]   # ImageNet mean (used for pretrained ResNet)
+    std: [0.229, 0.224, 0.225]
+
+# ─── Model ─────────────────────────────────────────────────────────────────────
+model:
+  architecture: "resnet18"         # Options: logistic, simple_cnn, resnet18
+  pretrained: false                # Train from scratch (not fine-tuning)
+  dropout_rate: 0.5
+  dropout_enabled: true
+
+# ─── Training ──────────────────────────────────────────────────────────────────
+training:
+  epochs: 50
+  optimizer: "adam"
+  learning_rate: 1.0e-4
+  weight_decay: 1.0e-4
+  scheduler: "cosine"              # CosineAnnealingLR
+  scheduler_T_max: 50
+  early_stopping:
+    enabled: true
+    patience: 7
+    monitor: "val_balanced_accuracy"
+    mode: "max"
+
+# ─── Loss ──────────────────────────────────────────────────────────────────────
+loss:
+  type: "cross_entropy"            # Options: cross_entropy, focal
+  focal_gamma: 2.0
+  focal_alpha: null                # null = uniform; list = per-class weights
+  use_class_weights: true          # Inverse-frequency weighting for imbalance
+
+# ─── Evaluation ────────────────────────────────────────────────────────────────
+evaluation:
+  primary_metric: "balanced_accuracy"
+  secondary_metrics:
+    - "macro_auc"
+    - "macro_f1"
+    - "per_class_f1"
+  confusion_matrix: true
+  gradcam: true
+
+# ─── Output ────────────────────────────────────────────────────────────────────
+output:
+  results_dir: "results/"
+  checkpoint_dir: "results/checkpoints/"
+  figures_dir: "figures/"
+  log_interval: 10                 # Log every N batches
